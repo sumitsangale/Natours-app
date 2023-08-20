@@ -13,6 +13,7 @@ router.patch(
   authController.protectRoute,
   authController.updatePassword
 );
+router.patch('/updateMe', authController.protectRoute, userController.updateMe);
 
 router
   .route('/')
