@@ -3,7 +3,7 @@ html(lang="en")
   head
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    title Natours | #{tour}
+    title Natours | #{title}
     link(rel="stylesheet", href="css/style.css")
     link(rel="shortcut icon", href="img/favicon.png", type="image/png")
     link(rel="stylesheet", href="https://fonts.googleapis.com/css?family=Lato:300,300i,700")
@@ -13,8 +13,8 @@ html(lang="en")
     include _header
 
     // CONTENT
-    section.overview
-      h1 content 
+    block content 
+      h1 block heading placeholder 
 
     // FOOTER
     include _footer
