@@ -4,7 +4,9 @@
 /dist
 /tmp
 /out-tsc
-/backend/angular
+/.cache
+/public/js/bundle.js
+/public/js/bundle.js.map
 # Only exists if Bazel was run
 /bazel-out
 
