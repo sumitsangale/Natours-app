@@ -3,6 +3,7 @@ const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const path = require('path');
+const cookieParser = require('cookie-parser');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -24,6 +25,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Set security headers
 app.use(helmet());
+// app.use(helmet({ contentSecurityPolicy: false }));
+
+// Set the Content Security Policy header
+app.use((req, res, next) => {
+  res.setHeader(
+    'Content-Security-Policy',
+    "default-src 'self' https://cdnjs.cloudflare.com/ https://fonts.googleapis.com; script-src 'self' https://cdnjs.cloudflare.com/ https://fonts.googleapis.com; style-src 'self' https://cdnjs.cloudflare.com/ https://fonts.googleapis.com; img-src 'self' https://cdnjs.cloudflare.com/;"
+  );
+  next();
+});
 
 //Development logging
 if (process.env.NODE_ENV === 'development') {
@@ -40,6 +51,7 @@ app.use('/api', limiter);
 
 //body parser to read from request body
 app.use(express.json());
+app.use(cookieParser());
 
 //test middleware
 app.use((req, res, next) => {
