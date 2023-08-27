@@ -57,6 +57,16 @@ exports.login = catchAsync(async (req, res, next) => {
   createSendToken(user, 200, res);
 });
 
+exports.logOut = (req, res) => {
+  res.cookie('jwt', 'loggedout', {
+    expiresIn: new Date(Date.now() + 10 * 1000)
+  });
+
+  res.status(200).json({
+    status: 'success'
+  });
+};
+
 exports.protectRoute = catchAsync(async (req, res, next) => {
   //check token is there in req
   let token;
@@ -100,31 +110,35 @@ exports.protectRoute = catchAsync(async (req, res, next) => {
   next();
 });
 
-exports.isLoggedIn = catchAsync(async (req, res, next) => {
+exports.isLoggedIn = async (req, res, next) => {
   if (req.cookies.jwt) {
-    //verify token
-    const decoded = await promisify(jwt.verify)(
-      req.cookies.jwt,
-      process.env.JWT_SECRET
-    );
+    try {
+      //verify token
+      const decoded = await promisify(jwt.verify)(
+        req.cookies.jwt,
+        process.env.JWT_SECRET
+      );
 
-    //check user still exists
-    const freshUser = await User.findById(decoded.id);
-    if (!freshUser) {
+      //check user still exists
+      const freshUser = await User.findById(decoded.id);
+      if (!freshUser) {
+        return next();
+      }
+
+      //check user reseted password
+      if (freshUser.passwordChangedAfter(decoded.iat)) {
+        return next();
+      }
+
+      //there is logged user , send user in template
+      res.locals.user = freshUser;
+      return next();
+    } catch (err) {
       return next();
     }
-
-    //check user reseted password
-    if (freshUser.passwordChangedAfter(decoded.iat)) {
-      return next();
-    }
-
-    //there is logged user , send user in template
-    res.locals.user = freshUser;
-    return next();
   }
   next();
-});
+};
 
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
