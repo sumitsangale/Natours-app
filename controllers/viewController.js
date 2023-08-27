@@ -21,7 +21,7 @@ exports.getTour = catchAsync(async (req, res) => {
 
   //create teplate using response data
   res.status(200).render('tour.pug', {
-    title: 'The Forest Hiker',
+    title: `${tour.name} Tour`,
     tour
   });
 });
