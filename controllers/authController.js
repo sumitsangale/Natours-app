@@ -100,6 +100,32 @@ exports.protectRoute = catchAsync(async (req, res, next) => {
   next();
 });
 
+exports.isLoggedIn = catchAsync(async (req, res, next) => {
+  if (req.cookies.jwt) {
+    //verify token
+    const decoded = await promisify(jwt.verify)(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
+
+    //check user still exists
+    const freshUser = await User.findById(decoded.id);
+    if (!freshUser) {
+      return next();
+    }
+
+    //check user reseted password
+    if (freshUser.passwordChangedAfter(decoded.iat)) {
+      return next();
+    }
+
+    //there is logged user , send user in template
+    res.locals.user = freshUser;
+    return next();
+  }
+  next();
+});
+
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
     //here roles = ['admin', 'lead-guide']

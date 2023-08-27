@@ -31,7 +31,7 @@ app.use(helmet());
 app.use((req, res, next) => {
   res.setHeader(
     'Content-Security-Policy',
-    "default-src 'self' https://cdnjs.cloudflare.com/ https://fonts.googleapis.com; script-src 'self' https://cdnjs.cloudflare.com/ https://fonts.googleapis.com; style-src 'self' https://cdnjs.cloudflare.com/ https://fonts.googleapis.com; img-src 'self' https://cdnjs.cloudflare.com/;"
+    "default-src 'self' https://cdnjs.cloudflare.com/ https://fonts.googleapis.com/; script-src 'self' https://cdnjs.cloudflare.com/ https://fonts.googleapis.com/; style-src 'self' https://cdnjs.cloudflare.com/ https://fonts.googleapis.com/; img-src 'self' https://cdnjs.cloudflare.com/;"
   );
   next();
 });
