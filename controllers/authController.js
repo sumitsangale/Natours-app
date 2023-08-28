@@ -107,6 +107,7 @@ exports.protectRoute = catchAsync(async (req, res, next) => {
 
   //Grant access
   req.user = freshUser;
+  res.locals.user = freshUser;
   next();
 });
 
