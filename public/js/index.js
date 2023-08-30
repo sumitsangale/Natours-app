@@ -11,23 +11,28 @@ const userDataForm = document.querySelector('.form-user-data');
 const userPasswordForm = document.querySelector('.form-user-password');
 
 const displayMap = location => {
-  location.forEach(item =>{
+  location.forEach(item => {
     item.coordinates.reverse();
-  })
+  });
 
   // Initialize the map
-  let map = L.map('map', {scrollWheelZoom: false}).setView(location[0].coordinates, 6);
+  let map = L.map('map', { scrollWheelZoom: false }).setView(
+    location[0].coordinates,
+    6
+  );
 
   // Add a tile layer (base map)
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   }).addTo(map);
 
-  location.forEach((place)=>{
-  // Add a marker
-  L.marker(place.coordinates).addTo(map)
+  location.forEach(place => {
+    // Add a marker
+    L.marker(place.coordinates)
+      .addTo(map)
       .bindPopup(`Day-${place.day} ${place.description}`);
-  })
+  });
 };
 
 //Delegation
@@ -50,9 +55,11 @@ if (logoutBtn) logoutBtn.addEventListener('click', logOut);
 if (userDataForm) {
   userDataForm.addEventListener('submit', e => {
     e.preventDefault();
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    updateSettings({ name, email }, 'data');
+    const form = new FormData();
+    form.append('name', document.getElementById('name').value);
+    form.append('email', document.getElementById('email').value);
+    form.append('photo', document.getElementById('photo').files[0]);
+    updateSettings(form, 'data');
   });
 }
 
@@ -75,4 +82,3 @@ if (userPasswordForm) {
       'save password';
   });
 }
-
