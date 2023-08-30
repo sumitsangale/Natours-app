@@ -22,19 +22,19 @@ app.set('views', path.join(__dirname, 'views'));
 //serving static files
 // app.use(express.static(`${__dirname}/public`));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'node_modules')));
 
 // Set security headers
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      connectSrc: ["'self'", "ws://localhost:45391"],
+      imgSrc: ["'self'", '*', 'data:']
+    },
+  },
+}));
 // app.use(helmet({ contentSecurityPolicy: false }));
-
-// Set the Content Security Policy header
-// app.use((req, res, next) => {
-//   res.setHeader(
-//     'Content-Security-Policy',
-//     "default-src 'self' https://cdnjs.cloudflare.com/ https://fonts.googleapis.com/; script-src 'self' https://cdnjs.cloudflare.com/ https://fonts.googleapis.com/; style-src 'self' https://cdnjs.cloudflare.com/ https://fonts.googleapis.com/; img-src 'self' https://cdnjs.cloudflare.com/;"
-//   );
-//   next();
-// });
 
 //Development logging
 if (process.env.NODE_ENV === 'development') {
