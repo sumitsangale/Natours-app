@@ -20,6 +20,7 @@
     "express": "^4.16.4",
     "express-rate-limit": "^6.9.0",
     "helmet": "^7.0.0",
+    "html-to-text": "^9.0.5",
     "jsonwebtoken": "^9.0.1",
     "leaflet": "^1.9.4",
     "mongoose": "^5.5.2",
