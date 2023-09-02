@@ -10,6 +10,7 @@ const globalErrorHandler = require('./controllers/errorController');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
+const bookingRouter = require('./routes/bookingRoutes');
 const viewRouter = require('./routes/viewRoutes');
 
 const app = express();
@@ -25,15 +26,19 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'node_modules')));
 
 // Set security headers
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      connectSrc: ["'self'", "ws://localhost:45391"],
-      imgSrc: ["'self'", '*', 'data:']
-    },
-  },
-}));
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        connectSrc: ["'self'", 'ws://localhost:*', 'https://js.stripe.com/v3/'],
+        imgSrc: ["'self'", '*', 'data:'],
+        scriptSrc: ["'self'", 'https://js.stripe.com'],
+        frameSrc: ["'self'", 'https://js.stripe.com']
+      }
+    }
+  })
+);
 // app.use(helmet({ contentSecurityPolicy: false }));
 
 //Development logging
@@ -65,6 +70,7 @@ app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
+app.use('/api/v1/bookings', bookingRouter);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

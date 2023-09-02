@@ -2,6 +2,11 @@ import '@babel/polyfill';
 import L from 'leaflet';
 import { login, logOut } from './login';
 import { updateSettings } from './updateSettings';
+import { bookTour } from './stripe';
+
+const stripe = Stripe(
+  'pk_test_51NlrisSEMxTmDuuFw3FeqVVb4e0oynKgOogKLCyfjE3iXOa3NpLpDPLcz8IiAHAXIEPSbv2Df392pLd5vmxi9oc200pIfk5vhA'
+);
 
 //DOM Elements
 const mapBox = document.getElementById('map');
@@ -9,6 +14,7 @@ const loginForm = document.querySelector('.form--login');
 const logoutBtn = document.querySelector('.nav__el--logout');
 const userDataForm = document.querySelector('.form-user-data');
 const userPasswordForm = document.querySelector('.form-user-password');
+const bookBtn = document.getElementById('book-tour');
 
 const displayMap = location => {
   location.forEach(item => {
@@ -80,5 +86,13 @@ if (userPasswordForm) {
     document.getElementById('password-confirm').value = '';
     document.querySelector('.btn--save--password').textContent =
       'save password';
+  });
+}
+
+if (bookBtn) {
+  bookBtn.addEventListener('click', e => {
+    e.target.textContent = 'Processing...';
+    const { tourId } = e.target.dataset;
+    bookTour(tourId, stripe);
   });
 }
