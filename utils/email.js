@@ -11,8 +11,15 @@ module.exports = class Email {
 
   newTransport() {
     if (process.env.NODE_ENV === 'production') {
-      //sendGrid for production
-      return 1;
+      //brevo for production
+      //signup test mail using mailsac to test user
+      return nodemailer.createTransport({
+        service: 'brevo',
+        auth: {
+          user: process.env.EMAIL_BREVO_USERNAME,
+          pass: process.env.EMAIL_BREVO_PASSWORD
+        }
+      });
     }
 
     //mailTrap for development
