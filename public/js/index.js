@@ -1,4 +1,5 @@
 import '@babel/polyfill';
+import '@babel/plugin-transform-runtime';
 import L from 'leaflet';
 import { login, logOut } from './login';
 import { updateSettings } from './updateSettings';
