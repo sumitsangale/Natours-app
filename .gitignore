@@ -5,8 +5,7 @@
 /tmp
 /out-tsc
 /.cache
-/public/js/bundle.js
-/public/js/bundle.js.map
+*.env
 # Only exists if Bazel was run
 /bazel-out
 
