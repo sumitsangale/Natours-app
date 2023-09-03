@@ -1,3 +1,4 @@
+require('regenerator-runtime/runtime');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
